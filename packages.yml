@@ -1,0 +1,33 @@
+- hosts: local
+  become: yes
+  tasks:
+  - name: Add git ppa
+    apt_repository: repo=ppa:git-core/ppa state=present
+  - name: apt-get update
+    apt: update_cache=yes
+  - name: Install figlet
+    apt: name=figlet state=present
+  - name: Install pip
+    apt: name=python-pip state=present
+# - name: Install python-dev
+#   apt: name=python-dev state=present
+  - name: Install keepassx
+    apt: name=keepassx state=present
+  - name: Install unzip
+    apt: name=unzip state=present
+# - name: Install virtualbox
+#   apt: name=virtualbox-qt state=present
+  - name: Install vagrant
+    apt: name=vagrant state=present
+  - name: Install supervisor
+    apt: name=supervisor state=present
+# - name: Install nfs-kernel-server
+#   apt: name=nfs-kernel-server state=present
+# - name: Install mysql-server
+#   apt: name=mysql-server state=present
+  - name: Install git
+    apt: name=git state=present
+# - name: Install chromium-browser
+#   apt: name=chromium-browser state=present
+  - name: Install postfix
+    apt: name=postfix state=present
