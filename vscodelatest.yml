@@ -1,0 +1,32 @@
+---
+- hosts: local
+
+  tasks:
+    # - name: Check if my_package is installed
+    #   command: dpkg-query -W my_package
+    #   register: my_package_check_deb
+    #   failed_when: my_package_check_deb.rc > 1
+    #   changed_when: my_package_check_deb.rc == 1
+
+    - name: VSINSIDERS | Download Visual Visual Studio Early Insiders release Setup
+      get_url:
+        url: 'https://go.microsoft.com/fwlink/?LinkID=760865'
+        dest: '/tmp/code-insider.deb'
+      tags: [download, visualstudio]
+
+    - name: Install Visual Studio Early Insiders release
+      apt: deb="/tmp/code-insider.deb"
+      become: true
+
+    # - name: VS2015 | Install Visual Studio Community 2015
+    #   raw: 'C:\TEMP\vs_community.exe /Silent /NoRestart
+    #         /InstallSelectableItems NativeLanguageSupport_Group
+    #         /Log C:\TEMP\vs2015_install_log.txt'
+    #   tags: [install, visualstudio]
+
+    # - name: Reboot machine after Visual Studio installation
+    #   win_reboot:
+
+    # - import_tasks: ./common-ansible-playbook.yaml
+    #   tags: common
+
