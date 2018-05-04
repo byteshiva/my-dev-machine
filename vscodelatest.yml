@@ -1,5 +1,7 @@
 ---
 - hosts: local
+  become: true
+  become_user: siva
 
   tasks:
     # - name: Check if my_package is installed

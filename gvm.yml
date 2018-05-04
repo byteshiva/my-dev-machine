@@ -1,0 +1,40 @@
+# Here is how to install gvm and golang in an Ansible task.
+# The important part is that you have to shell with /bin/bash -c and source nvm.sh
+---
+- name: run the gvm tasks on the localhost
+# vars:
+#    go_version: go1.10.2
+#       curr_user: siva
+  hosts: local
+  become: yes
+  become_user: siva
+  tasks:
+    - name: Install gvm
+      shell: curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
+      args:
+        chdir: "{{ ansible_env.HOME }}"
+        executable: /bin/zsh
+      ignore_errors: true
+      register: error_state
+
+    - name: Set go version 
+      set_fact:
+        go_version: go1.10.2
+
+    - name: Check if {{ go_version }} is the default go version
+      shell:  $GVM_ROOT/scripts/gvm && gvm install {{ go_version }}
+      args:
+        executable: /bin/bash
+      register: gvm_check_default
+      changed_when: false
+      failed_when: false
+ 
+    - name: Install goLang and set version
+      shell: source $GVM_ROOT/scripts/gvm && gvm use {{ go_version }} --default executable="/bin/bash"
+      args:
+        chdir: "{{ ansible_env.HOME }}"
+        executable: /bin/bash
+      ignore_errors: false
+
+
+
