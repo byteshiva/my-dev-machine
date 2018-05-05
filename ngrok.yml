@@ -1,0 +1,54 @@
+---
+- name: Download and unzip ngrok tunnel Server on the local machine
+  hosts: local
+  become: yes
+  become_user: siva
+  tasks:
+    - name: Set ngrok linux 64 bit version 
+      set_fact:
+        ngrok_version: ngrok-stable-linux-amd64
+        ngrok_exec: ngrok
+        usr_local_bin_dir: "/usr/local/bin/"
+        local_temp_user: siva
+    - get_url:
+        url: "https://bin.equinox.io/c/4VmDzA7iaHb/{{ ngrok_version }}.zip"
+        dest: "{{ ansible_env.HOME }}/{{ ngrok_version }}.zip"
+    - name: Unarchive a file that is already on the remote machine
+      become: yes
+      become_method: su
+      unarchive:
+        src: "{{ ansible_env.HOME }}/{{ ngrok_version }}.zip"
+        dest:  "{{ ansible_env.HOME }}" ## "/usr/local/bin"
+        group: "{{ local_temp_user }}"
+        remote_src: yes
+
+# @todo how to copy to /usr/loca/bin 
+# - name: copy a file to us local bin
+#   become: yes
+#   become_user: root
+#   become_method: su
+#   copy:
+#     src: "{{ ansible_env.HOME }}/{{ ngrok_exec }}" 
+#     dest: "{{usr_local_bin_dir}}"
+#     owner: root
+#     group: root
+#     mode: 0644
+
+# become: yes
+# become_method: su
+# # shell: "cp {{ ansible_env.HOME }}/{{ ngrok_exec }} {{usr_local_bin_dir}} | sudo chown   {{usr_local_bin_dir}}{{ ngrok_exec }}"
+# shell: "cp {{ ansible_env.HOME }}/{{ ngrok_exec }} {{usr_local_bin_dir}} "
+# args:
+#   chdir: "{{ usr_local_bin_dir }}"
+
+# - debug: 
+#     msg: "ngrok was downloaded"
+#     when: get_ngrok|changed
+
+
+# - name: Download ngrok and unzip to CURRENT directory
+#   shell: "curl -O -f https://bin.equinox.io/c/4VmDzA7iaHb/{{ ngrok_version }}.zip | unzip -f {{ ngrok_version }}.zip"
+#   args:
+#     chdir: "{{ ansible_env.HOME }}"
+
+# register: get_ngrok

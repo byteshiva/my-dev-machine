@@ -1,0 +1,11 @@
+# I tried a bunch of different things, and as usual it's simple, but you have to get it right.
+# The important part is that you have to shell with /bin/bash -c and source nvm.sh
+---
+- name: run the caddy Server tasks on the localhost
+  hosts: local
+  become: yes
+  become_user: siva
+  tasks:
+    - name: Install caddy
+      shell: "curl https://getcaddy.com | bash -s personal http.cache,http.cors,http.expires,http.filter,http.forwardproxy,http.geoip,http.ipfilter,http.jekyll,http.jwt,http.locale,http.login,http.mailout,http.minify,http.nobots,http.proxyprotocol,http.ratelimit,http.realip,http.reauth,http.restic,http.upload,http.webdav"
+      

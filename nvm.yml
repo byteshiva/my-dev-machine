@@ -20,7 +20,7 @@
         chdir: "{{ ansible_env.HOME }}"
         executable: /bin/bash 
 
-    - name: Install Node.js asnd set version
+    - name: Install Node.js and set version
       shell: '. {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm alias default 10.0.0'
       args:
         chdir: "{{ ansible_env.HOME }}"
