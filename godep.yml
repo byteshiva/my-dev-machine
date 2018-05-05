@@ -1,0 +1,11 @@
+# I tried a bunch of different things, and as usual it's simple, but you have to get it right.
+# The important part is that you have to shell with /bin/bash -c and source nvm.sh
+---
+- name: Install golang Dep - Dependency Package Manager on the localhost
+  hosts: local
+  become: yes
+  become_user: siva
+  tasks:
+    - name: Install golang dep dependency management
+      shell: "curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh"
+      

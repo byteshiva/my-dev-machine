@@ -1,0 +1,11 @@
+---
+- name: Install Heroku on local machine running Ubuntu 18.04
+  hosts: local
+  become: yes
+  become_user: root
+  tasks:
+    - name: Install Heroku
+      shell: "curl https://cli-assets.heroku.com/install-ubuntu.sh | sh"
+      
+
+
