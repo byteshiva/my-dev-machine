@@ -1,0 +1,22 @@
+## Download and install katacode from << https://www.katacoda.com >>
+---
+- name: Install katacode cli
+  hosts: local
+  become: yes
+  become_user: siva
+  tasks:
+    - name: Set tmp for storing katacode
+      set_fact:
+        home_dir: /tmp
+        filename: 'katacode'
+
+    - name: Install kata-code cli
+      shell: "curl -Ls --output {{ filename }} https://www.katacoda.com/cli/download/linux"
+      args:
+        chdir: "{{ ansible_env.HOME }}"
+        executable: /bin/bash
+
+    - name: Set persmission Katacode 
+      file:
+        path: "{{ ansible_env.HOME }}/{{ filename }}"
+        mode: 0744
