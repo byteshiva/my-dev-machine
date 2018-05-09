@@ -16,9 +16,13 @@
         dest: '/tmp/code-insider.deb'
       tags: [download, visualstudio]
 
+    # Need to test below deb installation on ubuntu - it failed because it needs superuser priviledges dpkg: error: requested operation requires superuser privilege\n
+    # - name: Install Visual Studio Early Insiders release
+    # - apt: deb="/tmp/code-insider.deb"
+    # - become: true
+
     - name: Install Visual Studio Early Insiders release
-      apt: deb="/tmp/code-insider.deb"
-      become: true
+      shell: "sudo -i dpkg --force-confdef --force-confold -i /tmp/code-insider.deb"
 
     # - name: VS2015 | Install Visual Studio Community 2015
     #   raw: 'C:\TEMP\vs_community.exe /Silent /NoRestart
