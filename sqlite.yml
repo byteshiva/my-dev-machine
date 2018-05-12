@@ -1,0 +1,20 @@
+# I tried a bunch of different things, and as usual it's simple, but you have to get it right.
+# The important part is that you have to shell with /bin/bash -c and source nvm.sh
+---
+- name: run the caddy Server tasks on the localhost
+  hosts: local
+  become: yes
+  become_user: siva
+  tasks:
+    # - name: Install caddy
+    #   shell: "curl https://sqlite.org/snapshot/sqlite-snapshot-201805081303.tar.gz"
+    #   args:
+    #     chdir: "/tmp/"
+      
+    # # This works
+    # - name: Install unixODBC
+    #   command: sudo {{ item }} chdir="/tmp/{{ mysql_odbc_unixodbc_url | basename | replace('.tar.gz', '') }}"
+    #   with_items:
+    #     - ./configure --prefix=/usr/local
+    #     - make
+    # - make install 

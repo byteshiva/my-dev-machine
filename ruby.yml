@@ -1,0 +1,70 @@
+# roles/ruby/tasks/main.yml
+# This file contains all the tasks that will be run for the ruby play
+---
+- name: install required packages
+  become: true
+  apt: name={{item}} state=present update_cache=yes
+  with_items:
+    - build-essential
+    - cmake
+    - zlib1g-dev
+    - libyaml-dev
+    - libncurses-dev
+    - libssl-dev
+    - libreadline-dev
+
+- name: Get installed version
+  command: ruby --version
+  ignore_errors: True
+  changed_when: false
+  failed_when: false
+  register: ruby_installed_version
+
+- name: Force install if the version numbers do not match
+  set_fact:
+    ruby_reinstall_from_source: true
+  when: '(ruby_installed_version|success and (ruby_installed_version.stdout | regex_replace("^.*?([0-9\.]+).*$", "\\1") | version_compare(ruby_version, operator="!=")))'
+
+- when: ruby_installed_version|failed or ruby_reinstall_from_source
+  block:
+    - name: Download Ruby
+      get_url:
+        url: "https://cache.ruby-lang.org/pub/ruby/2.3/ruby-{{ruby_version}}.tar.gz"
+        dest: "/tmp/ruby-{{ruby_version}}.tar.gz"
+        sha256sum: "{{ruby_sha256sum}}"
+
+    - name: Extract archive
+      unarchive:
+        src: "/tmp/ruby-{{ruby_version}}.tar.gz"
+        dest: /tmp/
+        creates: "/tmp/ruby-{{ruby_version}}/README.md"
+        copy: false
+
+    - name: Configure install
+      command: ./configure --disable-install-doc
+      args:
+        chdir: "/tmp/ruby-{{ruby_version}}"
+        creates: "/tmp/ruby-{{ruby_version}}/config.status"
+
+    - name: Build ruby
+      command: make
+      args:
+        chdir: "/tmp/ruby-{{ruby_version}}"
+        creates: "/tmp/ruby-{{ruby_version}}/ruby"
+
+    - name: Install ruby
+      become: true
+      command: make install
+      args:
+        chdir: "/tmp/ruby-{{ruby_version}}"
+        creates: /usr/local/bin/ruby
+
+    - name: Remove build directory
+      file:
+        path: "/tmp/ruby-{{ruby_version}}"
+        state: absent
+
+    - name: Remove archive
+      file:
+        path: "/tmp/ruby-{{ruby_version}}.tar.gz"
+        state: absent
