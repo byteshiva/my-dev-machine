@@ -1,0 +1,8 @@
+# Install spyder ide for python 3
+- hosts: local
+  become: yes
+  tasks:
+  - name: apt-get update
+    apt: update_cache=yes
+  - name: Install spyder
+    apt: name=spyder state=present
