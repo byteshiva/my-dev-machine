@@ -1,0 +1,7 @@
+- hosts: local
+  become: yes
+  tasks:
+    - name: install the Tensorflow, force upgrade
+      pip: 
+        name: tensorflow
+        state: latest

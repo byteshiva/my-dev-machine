@@ -1,0 +1,8 @@
+- hosts: local
+  become: yes
+  tasks:
+    - name: install the Theano, force upgrade
+      pip: 
+        name: git+git://github.com/Theano/Theano.git
+        state: latest
+        extra_args: --upgrade --no-deps
